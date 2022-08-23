@@ -68,14 +68,14 @@ class CreateNewProduct implements DataPatchInterface
     protected EavSetup $eavSetup;
 
     /**
-     * @var array
-     */
-    protected array $sourceItems = [];
-
-    /**
      * @var CategoryLinkManagementInterface
      */
     protected CategoryLinkManagementInterface $categoryLink;
+
+    /**
+     * @var array
+     */
+    protected array $sourceItems = [];
 
     /**
      * Migration patch constructor.
@@ -158,12 +158,12 @@ class CreateNewProduct implements DataPatchInterface
             ->setStatus(Status::STATUS_ENABLED);
 
         $product = $this->productRepository->save($product);
-        $sourceItemFactory = $this->sourceItemFactory->create();
-        $sourceItemFactory->setSourceCode('default');
-        $sourceItemFactory->setQuantity(10);
-        $sourceItemFactory->setSku($product->getSku());
-        $sourceItemFactory->setStatus(SourceItemInterface::STATUS_IN_STOCK);
-        $this->sourceItems[] = $sourceItemFactory;
+        $sourceItem = $this->sourceItemFactory->create();
+        $sourceItem->setSourceCode('default');
+        $sourceItem->setQuantity(10);
+        $sourceItem->setSku($product->getSku());
+        $sourceItem->setStatus(SourceItemInterface::STATUS_IN_STOCK);
+        $this->sourceItems[] = $sourceItem;
         $this->sourceItemsSaveInterface->execute($this->sourceItems);
         $this->categoryLink->assignProductToCategories($product->getSku(), [2]);
     }
@@ -171,7 +171,7 @@ class CreateNewProduct implements DataPatchInterface
     /**
      * @return array
      */
-    public function getAliases():array
+    public function getAliases(): array
     {
         return [];
     }
